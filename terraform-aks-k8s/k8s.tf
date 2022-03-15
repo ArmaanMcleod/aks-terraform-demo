@@ -5,6 +5,7 @@ terraform {
       version = "~>2.0"
     }
   }
+  backend "azurerm" {}
 }
 
 provider "azurerm" {
@@ -17,12 +18,12 @@ data "azurerm_key_vault" "keyvault" {
 }
 
 data "azurerm_key_vault_secret" "spn_app_id" {
-  name = var.spn_app_id_secret_name
+  name         = var.spn_app_id_secret_name
   key_vault_id = data.azurerm_key_vault.keyvault.id
 }
 
 data "azurerm_key_vault_secret" "spn_password" {
-  name = var.spn_password_secret_name
+  name         = var.spn_password_secret_name
   key_vault_id = data.azurerm_key_vault.keyvault.id
 }
 
@@ -64,7 +65,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
       key_data = file(var.ssh_public_key)
     }
   }
-  
+
   default_node_pool {
     name       = "agentpool"
     node_count = var.agent_count
